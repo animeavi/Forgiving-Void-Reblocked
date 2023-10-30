@@ -64,20 +64,9 @@ public final class ForgivingVoidReBlocked extends JavaPlugin implements Listener
             return;
         }
 
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
-            if (isElytraFlying(player)) {
-                return;
-            }
-        }
-
         teleportEntity(entity);
         applyEffects(entity);
         event.setCancelled(true);
-    }
-
-    private boolean isElytraFlying(Player player) {
-        return player.isGliding();
     }
 
     private boolean isEntityInAllowedWorld(World world) {
