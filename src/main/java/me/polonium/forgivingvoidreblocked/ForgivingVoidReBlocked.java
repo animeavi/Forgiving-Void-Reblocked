@@ -98,8 +98,9 @@ public final class ForgivingVoidReBlocked extends JavaPlugin implements Listener
 
         if (entity instanceof Player) {
             Player player = (Player) entity;
-            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, config.getInt("effectDuration"), 1));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, config.getInt("effectDuration"), 1));
+            int tickrate = 20;
+            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, config.getInt("effectDuration") * tickrate, 1));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, config.getInt("effectDuration") * tickrate, 1));
         }
     }
 }
