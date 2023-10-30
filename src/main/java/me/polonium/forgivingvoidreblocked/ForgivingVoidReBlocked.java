@@ -12,6 +12,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,10 +27,9 @@ public final class ForgivingVoidReBlocked extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(this, this);
         // Load configurations and save default if missing
         config = getConfig();
-        config.addDefault("teleportYLevel", 300);
         config.addDefault("teleportOnlyPlayers", true);
         config.addDefault("allowedWorlds", new ArrayList<>(Arrays.asList("world", "world_nether", "world_the_end")));
-        config.addDefault("applyEffects", true);
+        config.addDefault("applyEffects", false);
         config.addDefault("effectDuration", 20);
 
         config.options().copyDefaults(true);
@@ -85,10 +85,20 @@ public final class ForgivingVoidReBlocked extends JavaPlugin implements Listener
     }
 
     private void teleportEntity(Entity entity) {
-        Location entitylocation = entity.getLocation();
-        entitylocation.setY(getConfig().getInt("teleportYLevel"));
-        entity.teleport(entitylocation);
+        Location spawn = entity.getServer().getWorld("world").getSpawnLocation();
 
+        // Stop fall damage
+        entity.setVelocity(new Vector(0, 0, 0)); 
+        entity.setFallDistance(0);
+
+        entity.teleport(spawn);
+        
+        if (entity instanceof Player) {
+          // Reset XP
+          ((Player) entity).setExp(0);
+          ((Player) entity).setLevel(0);
+          entity.getServer().broadcastMessage(entity.getName() + " fell into the void and got teleported to spawn! Naughty monkey!");
+        }
     }
 
     private void applyEffects(Entity entity) {
