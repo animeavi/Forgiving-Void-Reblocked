@@ -29,7 +29,7 @@ public final class ForgivingVoidReBlocked extends JavaPlugin implements Listener
         config = getConfig();
         config.addDefault("teleportOnlyPlayers", true);
         config.addDefault("allowedWorlds", new ArrayList<>(Arrays.asList("world", "world_nether", "world_the_end")));
-        config.addDefault("applyEffects", false);
+        config.addDefault("applyEffects", true);
         config.addDefault("effectDuration", 20);
 
         config.options().copyDefaults(true);
@@ -97,8 +97,11 @@ public final class ForgivingVoidReBlocked extends JavaPlugin implements Listener
 
         if (entity instanceof Player) {
             Player player = (Player) entity;
-            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, config.getInt("effectDuration"), 1));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, config.getInt("effectDuration"), 1));
+            int tickrate = 20;
+            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, config.getInt("effectDuration") * tickrate, 1));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, config.getInt("effectDuration") * tickrate, 1));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, config.getInt("effectDuration") * tickrate, 1));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, config.getInt("effectDuration") * tickrate, 1));
         }
     }
 }
